@@ -3,7 +3,8 @@
     <!-- 技能 -->
     <div id="main" ref="chartDom" class="demo">
     </div>
-     <!-- <a-tooltip placement="bottom">
+    <!-- 切换 -->
+    <a-tooltip placement="bottom" v-if="isShow">
     <template slot="title">
       数据结构
     </template>
@@ -13,13 +14,28 @@
     <div class="tips" @click="getChange(2)" v-else>
       <a-icon type="read" class="read" />
     </div>
-  </a-tooltip> -->
+  </a-tooltip>
   </div>
 </template>
 
 <script>
+// eslint-disable-next-line import/no-duplicates
+import demandList from '../apis/about'
+// eslint-disable-next-line import/no-duplicates
+import demandOption from '../apis/about'
 
 export default {
+  props: {
+    reshOption: {
+      type: Object
+      // required: true
+    }
+  },
+  computed: {
+    isShow () {
+      return !this.reshOption
+    }
+  },
   data () {
     return {
       flag: undefined
@@ -30,44 +46,15 @@ export default {
   },
   methods: {
     getDate () {
-      this.flag = 1
-      const option = {
-        title: {
-          text: '专业技能',
-          subtext: '技能分布',
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} '
-        },
-        series: [
-          {
-            name: '技能',
-            type: 'pie',
-            radius: [20, 140],
-            center: ['50%', '50%'],
-            roseType: 'area',
-            itemStyle: {
-              borderRadius: 5
-            },
-            data: [
-              { value: 85, name: 'Vue' },
-              { value: 85, name: 'Ant-Design' },
-              { value: 70, name: 'Element-UI' },
-              { value: 70, name: 'Vant' },
-              { value: 82, name: 'HTML5' },
-              { value: 82, name: 'CSS3' },
-              { value: 80, name: 'JavaScript' },
-              { value: 75, name: 'Git' },
-              { value: 75, name: 'Npm' }
-            ]
-          }
-        ]
-      }
+      // console.log(demandList, demandOption, '数据')
       this.$nextTick(() => {
         const chartDom = this.$echarts.init(this.$refs.chartDom)
-        chartDom.setOption(option)
+        chartDom.clear()
+        if (this.reshOption) {
+          chartDom.setOption(this.reshOption, true)
+        } else {
+          chartDom.setOption(demandOption.option, true)
+        }
       })
     },
     getChange (value) {
@@ -76,96 +63,10 @@ export default {
         this.flag = 2
       } else {
         this.flag = 1
-        const data = {
-          title: {
-            text: '专业技能',
-            subtext: '技能分布'
-          },
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'shadow'
-            }
-          },
-          grid: {
-            left: '0%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-          },
-          xAxis: {
-            type: 'value',
-            boundaryGap: [0, 0.01]
-          },
-          yAxis: {
-            type: 'category',
-            data: ['VUE', 'JavaScript', 'Html5', 'Css3', 'Git', 'Npm']
-          },
-          series: [
-            {
-              type: 'bar',
-              data: [
-                {
-                  value: 85,
-                  itemStyle: {
-                    color: '#5470c6'
-                  }
-                },
-                {
-                  value: 85,
-                  itemStyle: {
-                    color: '#91cc75'
-                  }
-                },
-                {
-                  value: 76,
-                  itemStyle: {
-                    color: '#fac858'
-                  }
-                },
-                {
-                  value: 76,
-                  itemStyle: {
-                    color: '#ee6666'
-                  }
-                },
-                {
-                  value: 82,
-                  itemStyle: {
-                    color: '#73c0de'
-                  }
-                },
-                {
-                  value: 82,
-                  itemStyle: {
-                    color: '#3ba272'
-                  }
-                },
-                {
-                  value: 80,
-                  itemStyle: {
-                    color: '#fc8452'
-                  }
-                },
-                {
-                  value: 75,
-                  itemStyle: {
-                    color: '#9a60b4'
-                  }
-                },
-                {
-                  value: 70,
-                  itemStyle: {
-                    color: '#ea7ccc'
-                  }
-                }
-              ]
-            }
-          ]
-        }
         this.$nextTick(() => {
           const chartDom = this.$echarts.init(this.$refs.chartDom)
-          chartDom.setOption(Object.assign(data))
+          chartDom.clear()
+          chartDom.setOption(Object.assign(demandList.elseData), true)
         })
       }
     }
