@@ -30,7 +30,7 @@
        </div>
        <div class="describe">
            <h2> 技能描述</h2>
-           <p v-for="(item,index) in describeList" :key="index" class="items">
+           <p v-for="(item,index) in describeList" :key="index" class="items" id="demoItem" :ref="demoItem">
               <a-icon class="smile" type="smile" />{{item}}
            </p>
         </div>
@@ -41,7 +41,6 @@
 <script>
 import Skills from '@/components/Skills.vue'
 import Preview from '@/components/common/Preview'
-
 export default {
   name: 'Home',
   components: {
